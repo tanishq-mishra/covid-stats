@@ -18,8 +18,22 @@ class Graph extends Component {
 
         this.state = {
             series: [],
-            options: {},
-            toggle: 'infected'
+            options: {
+                chart: {
+                    height: 400,
+                    foreColor: "#222529",
+                },
+                grid: {
+                    show: false
+                },
+                xaxis: {
+                    axisBorder: {
+                        show: false
+                    }
+                }
+            },
+            toggle: 'infected',
+            show: false
         }
 
         axios.get('/graph').then(response => {
@@ -58,7 +72,9 @@ class Graph extends Component {
             displayData = recoveredDiff
             colorGraph = '#5CC1AC'
         }
+
         this.setState({
+            show: true,
             toggle: nextProps.toggle,
 
             series: [{
@@ -67,7 +83,7 @@ class Graph extends Component {
             }],
             options: {
                 chart: {
-                    height: 350,
+                    height: 400,
                     type: 'area',
                     foreColor: '#fff',
                     toolbar: {
@@ -84,6 +100,19 @@ class Graph extends Component {
                         },
                         autoSelected: "selection"
                     },
+                    animations: {
+                        enabled: true,
+                        easing: 'easeout',
+                        speed: 800,
+                        animateGradually: {
+                            enabled: true,
+                            delay: 150
+                        },
+                        dynamicAnimation: {
+                            enabled: true,
+                            speed: 350
+                        }
+                    }
                 },
                 colors: [colorGraph],
                 grid: {
@@ -129,6 +158,9 @@ class Graph extends Component {
                         offsetX: 0,
                         offsetY: 0
                     },
+                    axisBorder: {
+                        show: true
+                    }
                 },
             },
         })
@@ -137,8 +169,10 @@ class Graph extends Component {
     }
 
     render() {
+
         return (
             <div id="chart" className="graph-container">
+                {this.state.show && <div style={{ textAlign: "center" }}>World Data</div>}
                 <ReactApexChart options={this.state.options} series={this.state.series} type="area" height={300} />
             </div>
         );
